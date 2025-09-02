@@ -1,4 +1,5 @@
 let fileHandle = null;
+let isDirty = false; // Track unsaved changes
 
 const openBtn = document.getElementById("openFileBtn");
 const saveBtn = document.getElementById("saveFileBtn");
@@ -8,8 +9,16 @@ const fileNameDisplay = document.getElementById("fileNameDisplay");
 
 // Helper to update file name display
 function updateFileNameDisplay() {
-  fileNameDisplay.textContent = fileHandle ? fileHandle.name : "No file";
+  let name = fileHandle ? fileHandle.name : "No file";
+  if (isDirty) name += " *"; // show unsaved changes
+  fileNameDisplay.textContent = name;
 }
+
+// Mark textarea as dirty when changed
+noteInput.addEventListener("input", () => {
+  isDirty = true;
+  updateFileNameDisplay();
+});
 
 // Open file
 openBtn.addEventListener("click", async () => {
@@ -22,6 +31,7 @@ openBtn.addEventListener("click", async () => {
     });
     const file = await fileHandle.getFile();
     noteInput.value = await file.text();
+    isDirty = false;
     updateFileNameDisplay();
   } catch (err) {
     console.error("❌ Open cancelled or failed", err);
@@ -52,7 +62,6 @@ async function saveAs() {
       }],
     });
     await writeFile(fileHandle, noteInput.value);
-    updateFileNameDisplay();
   } catch (err) {
     console.error("❌ Save As cancelled or failed", err);
   }
@@ -63,9 +72,18 @@ async function writeFile(handle, contents) {
   const writable = await handle.createWritable();
   await writable.write(contents);
   await writable.close();
-  console.log("✅ File saved");
+  isDirty = false; // mark as saved
   updateFileNameDisplay();
+  console.log("✅ File saved");
 }
+
+// Warn user if they try to leave with unsaved changes
+window.addEventListener("beforeunload", (e) => {
+  if (isDirty) {
+    e.preventDefault();
+    e.returnValue = ""; // Required for Chrome to show warning
+  }
+});
 
 // Initialize file name display
 updateFileNameDisplay();
