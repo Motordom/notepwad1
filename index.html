@@ -1,32 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>notepwad</title>
-  <link rel="stylesheet" href="./style.css">
-  <link rel="manifest" href="./manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>notepwad</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="manifest" href="./manifest.json">
+    <!-- Favicon for browsers -->
+    <link rel="icon" href="./favicon-32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="./favicon-16.png" sizes="16x16" type="image/png">
+
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" href="./icon-192.png">
 </head>
+
 <body>
-  <div class="topbar">
-    <div class="left-controls">
-      <button id="openFileBtn">Open</button>
-      <button id="saveFileBtn">Save</button>
-      <button id="saveAsFileBtn">Save As</button>
+    <div class="topbar">
+        <div class="left-controls">
+            <button id="openFileBtn">Open</button>
+            <button id="saveFileBtn">Save</button>
+            <button id="saveAsFileBtn">Save As</button>
+        </div>
+        <h1>notepwad</h1>
+        <div class="right-filename" id="fileNameDisplay">No file</div>
     </div>
-    <h1>notepwad</h1>
-    <div class="right-filename" id="fileNameDisplay">No file</div>
-  </div>
 
-  <textarea id="noteInput" placeholder="Write your notes..."></textarea>
+    <textarea id="noteInput" placeholder="Write your notes..."></textarea>
 
-  <script src="./app.js"></script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js').then(() => {
-        console.log("✅ Service Worker registered");
-      });
-    }
-  </script>
+    <script src="./app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js').then(() => {
+                console.log("✅ Service Worker registered");
+            });
+        }
+    </script>
 </body>
+
 </html>

@@ -7,9 +7,11 @@ const ASSETS = [
   `${BASE_URL}style.css`,
   `${BASE_URL}app.js`,
   `${BASE_URL}manifest.json`,
-  `${BASE_URL}icon-512.png`,
   `${BASE_URL}sw.js`,
-  `${BASE_URL}README.md`
+  `${BASE_URL}favicon-16.png`,
+  `${BASE_URL}favicon-32.png`,
+  `${BASE_URL}icon-192.png`,
+  `${BASE_URL}icon-512.png`,
 ];
 
 self.addEventListener('install', (event) => {
