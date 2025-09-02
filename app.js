@@ -1,44 +1,53 @@
 const noteInput = document.getElementById('noteInput');
-const saveBtn = document.getElementById('saveBtn');
-const clearBtn = document.getElementById('clearBtn');
-const notesList = document.getElementById('notesList');
+const openFileBtn = document.getElementById('openFileBtn');
+const saveFileBtn = document.getElementById('saveFileBtn');
 
-function loadNotes() {
-  const notes = JSON.parse(localStorage.getItem('notes')) || [];
-  notesList.innerHTML = '';
-  notes.forEach((note, index) => {
-    const li = document.createElement('li');
-    li.textContent = note;
-    li.title = "Click to delete this note";
-    li.addEventListener('click', () => deleteNote(index));
-    notesList.appendChild(li);
-  });
-}
+let fileHandle = null;
 
-function saveNote() {
-  const notes = JSON.parse(localStorage.getItem('notes')) || [];
-  if (noteInput.value.trim() !== '') {
-    notes.push(noteInput.value);
-    localStorage.setItem('notes', JSON.stringify(notes));
-    noteInput.value = '';
-    loadNotes();
+// ✅ Open a text file and load into textarea
+async function openFile() {
+  try {
+    const [handle] = await window.showOpenFilePicker({
+      types: [{
+        description: 'Text Files',
+        accept: { 'text/plain': ['.txt'] }
+      }]
+    });
+    fileHandle = handle;
+
+    const file = await handle.getFile();
+    const text = await file.text();
+    noteInput.value = text;
+
+    console.log("✅ File opened:", handle.name);
+  } catch (err) {
+    console.error("❌ Open failed:", err);
   }
 }
 
-function deleteNote(index) {
-  const notes = JSON.parse(localStorage.getItem('notes')) || [];
-  notes.splice(index, 1);
-  localStorage.setItem('notes', JSON.stringify(notes));
-  loadNotes();
-}
+// ✅ Save textarea content back to the file
+async function saveFile() {
+  try {
+    if (!fileHandle) {
+      // If no file is open, ask user where to save
+      fileHandle = await window.showSaveFilePicker({
+        types: [{
+          description: 'Text Files',
+          accept: { 'text/plain': ['.txt'] }
+        }]
+      });
+    }
 
-function clearAllNotes() {
-  if (confirm("Are you sure you want to clear all notes?")) {
-    localStorage.removeItem('notes');
-    loadNotes();
+    const writable = await fileHandle.createWritable();
+    await writable.write(noteInput.value);
+    await writable.close();
+
+    console.log("✅ File saved:", fileHandle.name);
+    alert("✅ Notes saved!");
+  } catch (err) {
+    console.error("❌ Save failed:", err);
   }
 }
 
-saveBtn.addEventListener('click', saveNote);
-clearBtn.addEventListener('click', clearAllNotes);
-window.addEventListener('load', loadNotes);
+openFileBtn.addEventListener('click', openFile);
+saveFileBtn.addEventListener('click', saveFile);
