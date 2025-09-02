@@ -73,14 +73,3 @@ textarea {
   color: #fff;
   font-weight: bold;
 }
-
-@font-face {
-  font-family: 'TrueDom';
-  src: url('./fonts/TrueDom-v2.01.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-
-header h1 {
-  font-family: 'TrueDom', sans-serif;
-}
