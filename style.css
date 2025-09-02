@@ -9,78 +9,33 @@ html, body {
 
 .topbar {
   display: flex;
-  flex-wrap: wrap; /* wrap for small screens */
   align-items: center;
   justify-content: center;
   background: #6E46E0;
   color: white;
   padding: 10px;
-  box-sizing: border-box;
+  position: relative;
 }
 
-/* Small screens: stacking order */
 .left-controls {
+  position: absolute;
+  left: 10px;
   display: flex;
   gap: 8px;
-  order: 2;
-  flex-wrap: wrap;
-  justify-content: center;
-  width: 100%;
-  margin-top: 4px;
 }
 
 .right-filename {
+  position: absolute;
+  right: 10px;
   font-size: 14px;
   color: white;
   font-weight: bold;
-  order: 3;
-  width: 100%;
-  text-align: center;
-  margin-top: 4px;
 }
 
 .topbar h1 {
   margin: 0;
   font-size: 20px;
-  order: 1;
   text-align: center;
-  min-width: 120px;
-  width: 100%;
-}
-
-/* Large screens: use grid for absolute centering */
-@media (min-width: 600px) {
-  .topbar {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    align-items: center;
-    justify-items: center;
-    flex-wrap: nowrap;
-  }
-
-  .left-controls {
-    order: 0;
-    grid-column: 1;
-    width: auto;
-    justify-content: start;
-    margin-top: 0;
-  }
-
-  .topbar h1 {
-    order: 0;
-    grid-column: 2;
-    justify-self: center;
-    width: auto;
-  }
-
-  .right-filename {
-    order: 0;
-    grid-column: 3;
-    width: auto;
-    margin-top: 0;
-    text-align: right;
-    justify-self: end;
-  }
 }
 
 button {
@@ -98,7 +53,7 @@ button:hover {
 }
 
 textarea {
-  flex: 1 1 auto;
+  flex: 1;
   width: 100%;
   padding: 15px;
   font-size: 16px;
@@ -107,20 +62,35 @@ textarea {
   outline: none;
   box-sizing: border-box;
   font-family: system-ui, sans-serif;
-  min-height: 0;
 }
 
-@media (max-width: 400px) {
-  button {
-    padding: 6px 8px;
-    font-size: 14px;
+/* Mobile view: stack title, buttons, filename */
+@media (max-width: 600px) {
+  .topbar {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    position: relative;
+    text-align: center;
+  }
+
+  .left-controls, .right-filename {
+    position: static; /* remove absolute positioning */
+    width: 100%;
+    justify-content: center;
+    margin: 4px 0;
   }
 
   .topbar h1 {
-    font-size: 18px;
+    order: 1;
+    margin-bottom: 4px;
+  }
+
+  .left-controls {
+    order: 2;
   }
 
   .right-filename {
-    font-size: 12px;
+    order: 3;
   }
 }
