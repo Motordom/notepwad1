@@ -12,5 +12,6 @@ Todo
 - Add Safari iOS support
 - Clean up code
 - Fix header display on smaller screens
-- Add version number
+- Add version number (fix display)
 - Fix cached css not clearing
+- add a license
