@@ -13,3 +13,4 @@ Todo
 - Clean up code
 - Fix header display on smaller screens
 - Add version number
+- Fix cached css not clearing

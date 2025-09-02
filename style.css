@@ -62,3 +62,28 @@ textarea {
   box-sizing: border-box;
   font-family: system-ui, sans-serif;
 }
+
+/* Responsive layout for small screens */
+@media (max-width: 600px) {
+  .topbar {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .left-controls {
+    position: static;
+    margin: 5px 0;
+    justify-content: center;
+  }
+
+  .right-filename {
+    position: static;
+    margin: 5px 0;
+    text-align: center;
+  }
+
+  .topbar h1 {
+    margin-bottom: 5px;
+    text-align: center;
+  }
+}
