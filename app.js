@@ -1,134 +1,89 @@
 let fileHandle = null;
-let fileName = "untitled.txt";
-let isSaved = true;
+let isDirty = false; // Track unsaved changes
 
-const editor = document.getElementById("editor");
+const openBtn = document.getElementById("openFileBtn");
+const saveBtn = document.getElementById("saveFileBtn");
+const saveAsBtn = document.getElementById("saveAsFileBtn");
+const noteInput = document.getElementById("noteInput");
 const fileNameDisplay = document.getElementById("fileNameDisplay");
-const fileInput = document.getElementById("fileInput");
 
-const supportsFSAccess = "showOpenFilePicker" in window;
-
-// ================================
-// UI helpers
-// ================================
+// Helper to update file name display
 function updateFileNameDisplay() {
-  fileNameDisplay.textContent = isSaved ? fileName : `${fileName} *`;
+  let name = fileHandle ? fileHandle.name : "No file";
+  if (isDirty) name += " *"; // show unsaved changes
+  fileNameDisplay.textContent = name;
 }
 
-function setupButtons() {
-  if (supportsFSAccess) {
-    document.querySelectorAll(".fs").forEach(b => b.style.display = "inline-block");
-    document.querySelectorAll(".fallback").forEach(b => b.style.display = "none");
+// Mark textarea as dirty when changed
+noteInput.addEventListener("input", () => {
+  isDirty = true;
+  updateFileNameDisplay();
+});
+
+// Open file
+openBtn.addEventListener("click", async () => {
+  try {
+    [fileHandle] = await window.showOpenFilePicker({
+      types: [{
+        description: "Text Files",
+        accept: { "text/plain": [".txt"] },
+      }],
+    });
+    const file = await fileHandle.getFile();
+    noteInput.value = await file.text();
+    isDirty = false;
+    updateFileNameDisplay();
+  } catch (err) {
+    console.error("❌ Open cancelled or failed", err);
+  }
+});
+
+// Save (overwrite if file already opened, else Save As)
+saveBtn.addEventListener("click", async () => {
+  if (fileHandle) {
+    await writeFile(fileHandle, noteInput.value);
   } else {
-    document.querySelectorAll(".fs").forEach(b => b.style.display = "none");
-    document.querySelectorAll(".fallback").forEach(b => b.style.display = "inline-block");
+    await saveAs();
   }
-}
+});
 
-// ================================
-// FS Access API
-// ================================
-async function openFile() {
+// Save As (always prompt)
+saveAsBtn.addEventListener("click", async () => {
+  await saveAs();
+});
+
+// Save As helper
+async function saveAs() {
   try {
-    const [handle] = await window.showOpenFilePicker({
-      types: [{ description: "Text Files", accept: { "text/plain": [".txt"] } }]
+    fileHandle = await window.showSaveFilePicker({
+      types: [{
+        description: "Text Files",
+        accept: { "text/plain": [".txt"] },
+      }],
     });
-    fileHandle = handle;
-    const file = await handle.getFile();
-    editor.value = await file.text();
-    fileName = file.name;
-    isSaved = true;
-    updateFileNameDisplay();
+    await writeFile(fileHandle, noteInput.value);
   } catch (err) {
-    console.error("Open failed:", err);
+    console.error("❌ Save As cancelled or failed", err);
   }
 }
 
-async function saveFile() {
-  if (!fileHandle) return saveFileAs();
-  const writable = await fileHandle.createWritable();
-  await writable.write(editor.value);
+// Write helper
+async function writeFile(handle, contents) {
+  const writable = await handle.createWritable();
+  await writable.write(contents);
   await writable.close();
-  isSaved = true;
+  isDirty = false; // mark as saved
   updateFileNameDisplay();
+  console.log("✅ File saved");
 }
 
-async function saveFileAs() {
-  try {
-    const handle = await window.showSaveFilePicker({
-      suggestedName: fileName,
-      types: [{ description: "Text Files", accept: { "text/plain": [".txt"] } }]
-    });
-    fileHandle = handle;
-    fileName = handle.name;
-    const writable = await handle.createWritable();
-    await writable.write(editor.value);
-    await writable.close();
-    isSaved = true;
-    updateFileNameDisplay();
-  } catch (err) {
-    console.error("Save As failed:", err);
-  }
-}
-
-// ================================
-// Fallback
-// ================================
-function openFileFallback() {
-  fileInput.value = "";
-  fileInput.click();
-}
-
-fileInput.addEventListener("change", e => {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = () => {
-    editor.value = reader.result;
-    fileName = file.name;
-    isSaved = true;
-    updateFileNameDisplay();
-  };
-  reader.readAsText(file);
-});
-
-function downloadFile() {
-  const blob = new Blob([editor.value], { type: "text/plain" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = fileName;
-  a.click();
-  URL.revokeObjectURL(url);
-  isSaved = true;
-  updateFileNameDisplay();
-}
-
-// ================================
-// Unsaved handling
-// ================================
-editor.addEventListener("input", () => {
-  isSaved = false;
-  updateFileNameDisplay();
-});
-
-window.addEventListener("beforeunload", e => {
-  if (!isSaved) {
+// Warn user if they try to leave with unsaved changes
+window.addEventListener("beforeunload", (e) => {
+  if (isDirty) {
     e.preventDefault();
-    e.returnValue = "";
+    e.returnValue = ""; // Required for Chrome to show warning
   }
 });
 
-// ================================
-// Bindings
-// ================================
-document.getElementById("openBtn").addEventListener("click", openFile);
-document.getElementById("saveBtn").addEventListener("click", saveFile);
-document.getElementById("saveAsBtn").addEventListener("click", saveFileAs);
-
-document.getElementById("openFallbackBtn").addEventListener("click", openFileFallback);
-document.getElementById("downloadBtn").addEventListener("click", downloadFile);
-
-// Init
-setupButtons();
+// Initialize file name display
 updateFileNameDisplay();

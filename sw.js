@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v0.0.3';
+const CACHE_VERSION = 'v0.0.4';
 const CACHE_NAME = `notepad-cache-${CACHE_VERSION}`;
 const BASE_URL = self.location.pathname.replace(/sw\.js$/, ''); // auto-detect base path
 

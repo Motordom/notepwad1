@@ -14,30 +14,28 @@
     <!-- Apple Touch Icon -->
     <link rel="apple-touch-icon" href="./icon-192.png">
 </head>
+
 <body>
-  <header>
-    <div id="controls">
-      <!-- FS Access API controls -->
-      <button id="openBtn" class="fs">Open</button>
-      <button id="saveBtn" class="fs">Save</button>
-      <button id="saveAsBtn" class="fs">Save As</button>
-
-      <!-- Fallback controls -->
-      <button id="openFallbackBtn" class="fallback">Open</button>
-      <button id="downloadBtn" class="fallback">Download</button>
+    <div class="topbar">
+        <div class="left-controls">
+            <button id="openFileBtn">Open</button>
+            <button id="saveFileBtn">Save</button>
+            <button id="saveAsFileBtn">Save As</button>
+        </div>
+        <h1>notepwad</h1>
+        <div class="right-filename" id="fileNameDisplay">No file</div>
     </div>
-    <h1>notepwad</h1>
-    <div id="fileNameDisplay"></div>
-  </header>
 
-  <textarea id="editor" placeholder="Start typing..."></textarea>
-  <input type="file" id="fileInput" accept=".txt" style="display:none;" />
+    <textarea id="noteInput" placeholder="Write your notes..."></textarea>
 
-  <script src="app.js"></script>
-  <script>
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("service-worker.js");
-    }
-  </script>
+    <script src="./app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js').then(() => {
+                console.log("✅ Service Worker registered");
+            });
+        }
+    </script>
 </body>
+
 </html>
