@@ -19,5 +19,14 @@
             "sizes": "512x512",
             "type": "image/png"
         }
-    ]
+    ],
+    "categories": [
+        "utilities"
+    ],
+    "dir": "auto",
+    "lang": "en",
+    "scope": "https://motordom.github.io/notepwad1/",
+    "edge_side_panel": {
+        "preferred_width": 400
+    }
 }
