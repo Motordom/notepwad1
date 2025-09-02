@@ -8,12 +8,15 @@
   <link rel="manifest" href="./manifest.json">
 </head>
 <body>
-  <h1>Notepad</h1>
+  <div class="topbar">
+    <div class="left-controls">
+      <button id="openFileBtn">Open</button>
+      <button id="saveFileBtn">Save</button>
+    </div>
+    <h1>Notepad</h1>
+  </div>
 
   <textarea id="noteInput" placeholder="Write your notes..."></textarea>
-  <br>
-  <button id="openFileBtn">Open File</button>
-  <button id="saveFileBtn">Save File</button>
 
   <script src="./app.js"></script>
   <script>
