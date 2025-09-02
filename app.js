@@ -1,9 +1,15 @@
-let fileHandle = null; // Remember currently open file
+let fileHandle = null;
 
 const openBtn = document.getElementById("openFileBtn");
 const saveBtn = document.getElementById("saveFileBtn");
 const saveAsBtn = document.getElementById("saveAsFileBtn");
 const noteInput = document.getElementById("noteInput");
+const fileNameDisplay = document.getElementById("fileNameDisplay");
+
+// Helper to update file name display
+function updateFileNameDisplay() {
+  fileNameDisplay.textContent = fileHandle ? fileHandle.name : "No file";
+}
 
 // Open file
 openBtn.addEventListener("click", async () => {
@@ -15,8 +21,8 @@ openBtn.addEventListener("click", async () => {
       }],
     });
     const file = await fileHandle.getFile();
-    const contents = await file.text();
-    noteInput.value = contents;
+    noteInput.value = await file.text();
+    updateFileNameDisplay();
   } catch (err) {
     console.error("❌ Open cancelled or failed", err);
   }
@@ -46,6 +52,7 @@ async function saveAs() {
       }],
     });
     await writeFile(fileHandle, noteInput.value);
+    updateFileNameDisplay();
   } catch (err) {
     console.error("❌ Save As cancelled or failed", err);
   }
@@ -57,4 +64,8 @@ async function writeFile(handle, contents) {
   await writable.write(contents);
   await writable.close();
   console.log("✅ File saved");
+  updateFileNameDisplay();
 }
+
+// Initialize file name display
+updateFileNameDisplay();

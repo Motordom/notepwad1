@@ -1,16 +1,12 @@
-/* Make the page fill the screen */
 html, body {
   height: 100%;
   margin: 0;
   padding: 0;
   font-family: sans-serif;
-  background: #fafafa;
-  color: #333;
   display: flex;
   flex-direction: column;
 }
 
-/* Top bar */
 .topbar {
   display: flex;
   align-items: center;
@@ -21,7 +17,7 @@ html, body {
   position: relative;
 }
 
-/* Left-aligned controls */
+/* Left buttons */
 .left-controls {
   position: absolute;
   left: 10px;
@@ -29,7 +25,15 @@ html, body {
   gap: 8px;
 }
 
-/* Title */
+/* Right file name display */
+.right-filename {
+  position: absolute;
+  right: 10px;
+  font-size: 14px;
+  color: white;
+}
+
+/* Centered title */
 .topbar h1 {
   margin: 0;
   font-size: 20px;
