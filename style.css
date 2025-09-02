@@ -70,20 +70,25 @@ textarea {
     align-items: center;
   }
 
+  .topbar h1 {
+    order: 1; /* title first */
+    margin-bottom: 5px;
+    text-align: center;
+  }
+
   .left-controls {
     position: static;
-    margin: 5px 0;
+    order: 2; /* buttons second */
+    display: flex;
+    gap: 8px;
     justify-content: center;
+    margin: 5px 0;
   }
 
   .right-filename {
     position: static;
+    order: 3; /* filename third */
     margin: 5px 0;
-    text-align: center;
-  }
-
-  .topbar h1 {
-    margin-bottom: 5px;
     text-align: center;
   }
 }
