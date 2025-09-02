@@ -6,3 +6,10 @@ Features
 - How to disable copilot rewind
 - Clear cache on new release
 - Simple, for testing scenarios
+
+
+Todo
+- Add Safari iOS support
+- Clean up code
+- Fix header display on smaller screens
+- Add version number
