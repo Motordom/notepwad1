@@ -9,20 +9,20 @@ html, body {
 
 .topbar {
   display: flex;
-  flex-wrap: wrap; /* allow wrapping on small screens */
+  flex-wrap: wrap; /* wrap for small screens */
   align-items: center;
   justify-content: center;
   background: #6E46E0;
   color: white;
   padding: 10px;
   box-sizing: border-box;
-  position: relative; /* for absolute centering on large screens */
 }
 
+/* Small screens: stacking order */
 .left-controls {
   display: flex;
   gap: 8px;
-  order: 2; /* buttons second on small screens */
+  order: 2;
   flex-wrap: wrap;
   justify-content: center;
   width: 100%;
@@ -33,7 +33,7 @@ html, body {
   font-size: 14px;
   color: white;
   font-weight: bold;
-  order: 3; /* filename third on small screens */
+  order: 3;
   width: 100%;
   text-align: center;
   margin-top: 4px;
@@ -42,41 +42,44 @@ html, body {
 .topbar h1 {
   margin: 0;
   font-size: 20px;
-  order: 1; /* title first on small screens */
+  order: 1;
   text-align: center;
   min-width: 120px;
   width: 100%;
 }
 
-/* Large screens: horizontal layout */
+/* Large screens: use grid for absolute centering */
 @media (min-width: 600px) {
   .topbar {
-    justify-content: flex-start;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    justify-items: center;
     flex-wrap: nowrap;
   }
 
-  /* Center title absolutely */
-  .topbar h1 {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    order: 2;
+  .left-controls {
+    order: 0;
+    grid-column: 1;
     width: auto;
+    justify-content: start;
+    margin-top: 0;
   }
 
-  .left-controls {
-    order: 1; /* buttons left */
+  .topbar h1 {
+    order: 0;
+    grid-column: 2;
+    justify-self: center;
     width: auto;
-    margin-top: 0;
   }
 
   .right-filename {
-    order: 3; /* filename right */
+    order: 0;
+    grid-column: 3;
     width: auto;
     margin-top: 0;
     text-align: right;
-    position: absolute;
-    right: 10px;
+    justify-self: end;
   }
 }
 
@@ -94,9 +97,8 @@ button:hover {
   background: #f0f0f0;
 }
 
-/* Textarea fills remaining space */
 textarea {
-  flex: 1 1 auto; /* grow and shrink as needed */
+  flex: 1 1 auto;
   width: 100%;
   padding: 15px;
   font-size: 16px;
@@ -105,10 +107,9 @@ textarea {
   outline: none;
   box-sizing: border-box;
   font-family: system-ui, sans-serif;
-  min-height: 0; /* fixes flexbox shrink issues */
+  min-height: 0;
 }
 
-/* Optional: slightly smaller buttons and font on very narrow screens */
 @media (max-width: 400px) {
   button {
     padding: 6px 8px;
