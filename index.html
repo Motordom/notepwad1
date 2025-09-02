@@ -13,6 +13,7 @@
 
     <!-- Apple Touch Icon -->
     <link rel="apple-touch-icon" href="./icon-192.png">
+    <link rel="apple-touch-icon" href="./icon-512.png">
 </head>
 
 <body>
@@ -22,18 +23,18 @@
             <button id="saveFileBtn">Save</button>
             <button id="saveAsFileBtn">Save As</button>
         </div>
-        <h1>notepwad</h1>
+        <h1>notepwad v0.0.6</h1>
         <div class="right-filename" id="fileNameDisplay">No file</div>
     </div>
 
     <textarea id="noteInput" placeholder="Write your notes..."></textarea>
 
     <script src="./app.js"></script>
-    <script>
+<script>
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./sw.js').then(() => {
-                console.log("✅ Service Worker registered");
-            });
+            navigator.serviceWorker.register('./sw.js')
+                .then(() => console.log("Service Worker registration successful"))
+                .catch(err => console.error("Service Worker registration failed:", err));
         }
     </script>
 </body>

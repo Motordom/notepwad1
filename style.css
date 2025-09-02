@@ -2,7 +2,7 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: system-ui, sans-serif;
   display: flex;
   flex-direction: column;
 }
@@ -17,7 +17,6 @@ html, body {
   position: relative;
 }
 
-/* Left buttons */
 .left-controls {
   position: absolute;
   left: 10px;
@@ -25,21 +24,19 @@ html, body {
   gap: 8px;
 }
 
-/* Right file name display */
 .right-filename {
   position: absolute;
   right: 10px;
   font-size: 14px;
   color: white;
+  font-weight: bold;
 }
 
-/* Centered title */
 .topbar h1 {
   margin: 0;
   font-size: 20px;
 }
 
-/* Buttons */
 button {
   padding: 8px 12px;
   background: white;
@@ -54,7 +51,6 @@ button:hover {
   background: #f0f0f0;
 }
 
-/* Fullscreen textarea */
 textarea {
   flex: 1;
   width: 100%;
@@ -64,12 +60,5 @@ textarea {
   resize: none;
   outline: none;
   box-sizing: border-box;
-}
-
-.right-filename {
-  position: absolute;
-  right: 10px;
-  font-size: 14px;
-  color: #fff;
-  font-weight: bold;
+  font-family: system-ui, sans-serif;
 }
