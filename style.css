@@ -35,10 +35,6 @@ html, body {
 .topbar h1 {
   margin: 0;
   font-size: 20px;
-  text-align: center;
-  position: absolute; /* center relative to viewport */
-  left: 50%;
-  transform: translateX(-50%);
 }
 
 button {
@@ -65,32 +61,4 @@ textarea {
   outline: none;
   box-sizing: border-box;
   font-family: system-ui, sans-serif;
-}
-
-/* Mobile view: stack title, buttons, filename */
-@media (max-width: 600px) {
-  .topbar {
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-  }
-
-  .left-controls, .right-filename, .topbar h1 {
-    position: static; /* remove absolute */
-    width: 100%;
-    text-align: center;
-    margin: 4px 0;
-  }
-
-  .topbar h1 {
-    order: 1;
-  }
-
-  .left-controls {
-    order: 2;
-  }
-
-  .right-filename {
-    order: 3;
-  }
 }
