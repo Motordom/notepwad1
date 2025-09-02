@@ -1,5 +1,5 @@
 {
-    "name": "notwpwad",
+    "name": "notepwad",
     "short_name": "notwpwad",
     "description": "A PWA notepad app with no special features, usable for locked down testing environments.",
     "id": "https://motordom.github.io/notepwad1/",
