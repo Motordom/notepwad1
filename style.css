@@ -36,6 +36,9 @@ html, body {
   margin: 0;
   font-size: 20px;
   text-align: center;
+  position: absolute; /* center relative to viewport */
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 button {
@@ -68,22 +71,19 @@ textarea {
 @media (max-width: 600px) {
   .topbar {
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;
     justify-content: flex-start;
-    position: relative;
-    text-align: center;
   }
 
-  .left-controls, .right-filename {
-    position: static; /* remove absolute positioning */
+  .left-controls, .right-filename, .topbar h1 {
+    position: static; /* remove absolute */
     width: 100%;
-    justify-content: center;
+    text-align: center;
     margin: 4px 0;
   }
 
   .topbar h1 {
     order: 1;
-    margin-bottom: 4px;
   }
 
   .left-controls {
