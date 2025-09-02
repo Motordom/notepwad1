@@ -1,24 +1,51 @@
-const CACHE_NAME = 'notepad-cache-v1';
+// Update this on every release to force a new cache
+const CACHE_VERSION = 'v2'; 
+const CACHE_NAME = `notepad-cache-${CACHE_VERSION}`;
 
-// Auto-detect base URL (works with GitHub Pages subpaths like /notepwad1/)
-const BASE_URL = self.location.pathname.replace(/sw\.js$/, '');
-
+// List all files to cache (all static assets)
 const ASSETS = [
-  `${BASE_URL}`,
-  `${BASE_URL}index.html`,
-  `${BASE_URL}style.css`,
-  `${BASE_URL}app.js`,
-  `${BASE_URL}manifest.json`
+  './index.html',
+  './style.css',
+  './app.js',
+  './manifest.json',
+  './icon-192.png',
+  './icon-512.png',
+  './sw.js'
 ];
 
-self.addEventListener('install', e => {
-  e.waitUntil(
+// Install: cache all assets
+self.addEventListener('install', (event) => {
+  console.log('[SW] Installing and caching assets...');
+  event.waitUntil(
     caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS))
   );
+  // Force service worker to activate immediately
+  self.skipWaiting();
 });
 
-self.addEventListener('fetch', e => {
-  e.respondWith(
-    caches.match(e.request).then(response => response || fetch(e.request))
+// Activate: delete old caches
+self.addEventListener('activate', (event) => {
+  console.log('[SW] Activating and cleaning old caches...');
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(
+        keys
+          .filter(key => key !== CACHE_NAME)
+          .map(key => caches.delete(key))
+      )
+    )
+  );
+  self.clients.claim(); // Take control of all clients immediately
+});
+
+// Fetch: serve cached assets first, fallback to network
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    caches.match(event.request).then(cachedResponse => {
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+      return fetch(event.request);
+    })
   );
 });

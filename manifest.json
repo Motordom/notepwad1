@@ -1,10 +1,10 @@
 {
-  "name": "Notepad PWA",
-  "short_name": "Notepad",
+  "name": "notwpwad",
+  "short_name": "notepwad",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#4CAF50",
+  "theme_color": "#6E46E0",
   "icons": [
     {
       "src": "./icon-512.png",
