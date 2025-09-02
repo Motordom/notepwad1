@@ -1,53 +1,60 @@
-const noteInput = document.getElementById('noteInput');
-const openFileBtn = document.getElementById('openFileBtn');
-const saveFileBtn = document.getElementById('saveFileBtn');
+let fileHandle = null; // Remember currently open file
 
-let fileHandle = null;
+const openBtn = document.getElementById("openFileBtn");
+const saveBtn = document.getElementById("saveFileBtn");
+const saveAsBtn = document.getElementById("saveAsFileBtn");
+const noteInput = document.getElementById("noteInput");
 
-// ✅ Open a text file and load into textarea
-async function openFile() {
+// Open file
+openBtn.addEventListener("click", async () => {
   try {
-    const [handle] = await window.showOpenFilePicker({
+    [fileHandle] = await window.showOpenFilePicker({
       types: [{
-        description: 'Text Files',
-        accept: { 'text/plain': ['.txt'] }
-      }]
+        description: "Text Files",
+        accept: { "text/plain": [".txt"] },
+      }],
     });
-    fileHandle = handle;
-
-    const file = await handle.getFile();
-    const text = await file.text();
-    noteInput.value = text;
-
-    console.log("✅ File opened:", handle.name);
+    const file = await fileHandle.getFile();
+    const contents = await file.text();
+    noteInput.value = contents;
   } catch (err) {
-    console.error("❌ Open failed:", err);
+    console.error("❌ Open cancelled or failed", err);
   }
-}
+});
 
-// ✅ Save textarea content back to the file
-async function saveFile() {
+// Save (overwrite if file already opened, else Save As)
+saveBtn.addEventListener("click", async () => {
+  if (fileHandle) {
+    await writeFile(fileHandle, noteInput.value);
+  } else {
+    await saveAs();
+  }
+});
+
+// Save As (always prompt)
+saveAsBtn.addEventListener("click", async () => {
+  await saveAs();
+});
+
+// Save As helper
+async function saveAs() {
   try {
-    if (!fileHandle) {
-      // If no file is open, ask user where to save
-      fileHandle = await window.showSaveFilePicker({
-        types: [{
-          description: 'Text Files',
-          accept: { 'text/plain': ['.txt'] }
-        }]
-      });
-    }
-
-    const writable = await fileHandle.createWritable();
-    await writable.write(noteInput.value);
-    await writable.close();
-
-    console.log("✅ File saved:", fileHandle.name);
-    alert("✅ Notes saved!");
+    fileHandle = await window.showSaveFilePicker({
+      types: [{
+        description: "Text Files",
+        accept: { "text/plain": [".txt"] },
+      }],
+    });
+    await writeFile(fileHandle, noteInput.value);
   } catch (err) {
-    console.error("❌ Save failed:", err);
+    console.error("❌ Save As cancelled or failed", err);
   }
 }
 
-openFileBtn.addEventListener('click', openFile);
-saveFileBtn.addEventListener('click', saveFile);
+// Write helper
+async function writeFile(handle, contents) {
+  const writable = await handle.createWritable();
+  await writable.write(contents);
+  await writable.close();
+  console.log("✅ File saved");
+}
