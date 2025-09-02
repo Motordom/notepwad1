@@ -15,3 +15,4 @@ Todo
 - Add version number (fix display)
 - Fix cached css not clearing
 - add a license
+- disable dev tools so can't edit pwa or escape on kiosk mode
